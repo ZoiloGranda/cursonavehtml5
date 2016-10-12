@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		canvas {
+			border: solid;
+		}
+	</style>
+</head>
+<body>
+<canvas id="micanvas">
+<!--este mensaje aparece en los navegadores que no soporten canvas-->
+	Tu navegador no soporta canvas
+</canvas>
+<script>
+//<script>
+//le coloca un evento a que carga la funcion init, cuando la ventana(window) del navegador se terminade cargar(load) 
+	window.addEventListener("load", init);
+	function init(){
+		var canvas= document.getElementById("micanvas");
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		console.log(ctx);
+		//globalalpha retorna o modifica la transparencia de los elementos, que le siguen.
+		ctx.globalAlpha = 0.1;
+		//para darle color de relleno, el navegador va leyendo las figuras y valores en el mismo orden, el color puede ser el nombre del color, hexadecimal, rgb, rgba
+		ctx.fillStyle="red";
+		//20,20 son las coordenadas donde va a aparecer la figura. 50,50 en el ancho y alto de la figura
+		//(x,y,ancho,alto)
+		ctx.fillRect(20,20,50,50);
+		//strokeStyle color de la linea. En rgba el ultimo valor es la transparencia
+		ctx.strokeStyle="rgba(0,0,200,0.3)";
+		//linewidth grosor de la linea
+		ctx.lineWidth = 10;
+		//strokerect rectangulo sin relleno
+		ctx.strokeRect(90,90,50,50);
+		console.log(ctx);
+		</script>
+-------------------------------------------------
+<script>
+		//funcion para borrar el canvas. Se crea la funcion y se colocan los dos parametros que va a recibir, despues se llama
+		// a la funcion y se le pasa canvas y ctx. Borra desde las coordenadas 0,0
+		function erase (canvas,ctx) {
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		}
+		erase (canvas,ctx);
+		</script>
+-------------------------------------------------
+<script>
+//para crear arcos o circulos
+window.addEventListener("load", init);
+	function init(){
+		var canvas= document.getElementById("micanvas");
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		//para crear un arco, el ultimo valor es booleano, si es true va contrario a las agujas del reloj
+		//el anguloinicial y el angulo final, son valores en radianes
+		//ctx.arc(x,y,radio,anguloinicial,angulofinal,antireloj);
+		ctx.arc(20,20,10,0,a_radianes(360));
+		ctx.stroke();
+		ctx.arc(40,40,10,a_radianes(90),a_radianes(180),true);
+		ctx.fill();
+		ctx.arc(60,60,10,a_radianes(20),a_radianes(250),true);
+		ctx.stroke();
+		//formula para obtener los radianes 
+		function a_radianes (grados) {
+			return (grados*Math.PI)/180;
+			</script>
+			}
+-------------------------------------------------
+<script>
+//crear figuras con arcos
+			window.addEventListener("load", init);
+	function init(){
+		var canvas= document.getElementById("micanvas");
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		//.beginPath metodo para iniciar un nuevo trazo, sin seguir el rastro del anterior
+		ctx.beginPath();
+		//para crear un arco, el ultimo valor es booleano, si es true va contrario a las agujas del reloj
+		//el anguloinicial y el angulo final, son valores en radianes
+		//ctx.arc(x,y,radio,anguloinicial,angulofinal,antireloj);
+		ctx.arc(50,50,10,a_radianes(0),a_radianes(360),true);
+		//.moveTo es un metodo para move el lapiz sin dejaar el rastro
+		ctx.moveTo(50,80);
+		ctx.arc(50,50,30,a_radianes(90),a_radianes(180),true);
+		ctx.moveTo(160,50);
+		ctx.arc(150,50,10,a_radianes(0),a_radianes(360),true);
+		ctx.moveTo(150,80);
+		ctx.arc(150,50,30,a_radianes(90),a_radianes(360),false);
+		ctx.stroke();
+		//.beginPath metodo para iniciar un nuevo trazo, sin seguir el rastro del anterior
+		ctx.beginPath();
+		ctx.arc(90,110,30,a_radianes(0),a_radianes(180),false);
+		ctx.stroke();
+
+		//formula para obtener los radianes 
+		function a_radianes (grados) {
+			return (grados*Math.PI)/180;
+		}
+			</script>
+-------------------------------------------------
+<canvas id="micanvas">
+	Tu navegador no soporta canvas
+</canvas>
+<img src="img.png" id="img" style="display:none;">
+<script>
+//cargar una imagen dentro del canvas con el metodo .drawImage
+//le coloca un evento a que carga la funcion init, cuando la ventana(window) del navegador se terminade cargar(load) 
+	window.addEventListener("load", init);
+	function init(){
+		var canvas= document.getElementById("micanvas");
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		var img = document.getElementById("img");
+		//.drawimage metodo que  dibuja una imagen, video o otro canvas dentro del canvas. Se tiene que usar despues de cargar
+		//la imagen, video o canvas. Tambien puede cargar partes de una imagen o cambiarle el tamaño
+		//recibe mas parametros, en el ejemplo estan (la imagen,coordenada x, coordenada y, ancho, alto)
+		ctx.drawImage(img,0,0,150,150);
+	}
+</script>
+-------------------------------------------------
+<script>
+//lo nuevo aqui son los metodos .save y .restore, que guardan y restauran la informacion del contexto
+//crear figuras con arcos
+window.addEventListener("load", init);
+function init(){
+	var canvas= document.getElementById("micanvas");
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		//se define el strokestyle en black, y despues en blue, como las propiedades del contexto (ctx) son globales, el 
+		//canvas agarra la ultima y la utiliza para todo
+		ctx.strokeStyle="black";
+		dibujar_cara(ctx,"blue");
+		ctx.strokeRect(0,0,20,30);
+		function dibujar_cara (ctx,color) {
+			//.save guarda la informacion del contexto en este punto, para poder restaurarla despues, con este metodo, se 
+			//pueden modificar las propiedades del contexto solamente para lo que se quiere, y despues se restaura a como 
+			//estaba antes
+			ctx.save();
+			ctx.strokeStyle = color;
+		//.beginPath metodo para iniciar un nuevo trazo, sin seguir el rastro del anterior
+		ctx.beginPath();
+		//para crear un arco, el ultimo valor es booleano, si es true va contrario a las agujas del reloj
+		//el anguloinicial y el angulo final, son valores en radianes
+		//ctx.arc(x,y,radio,anguloinicial,angulofinal,antireloj);
+		ctx.arc(50,50,10,a_radianes(0),a_radianes(360),true);
+		//.moveTo es un metodo para move el lapiz sin dejaar el rastro
+		ctx.moveTo(50,80);
+		ctx.arc(50,50,30,a_radianes(90),a_radianes(180),true);
+		ctx.moveTo(160,50);
+		ctx.arc(150,50,10,a_radianes(0),a_radianes(360),true);
+		ctx.moveTo(150,80);
+		ctx.arc(150,50,30,a_radianes(90),a_radianes(360),false);
+		ctx.stroke();
+		//.beginPath metodo para iniciar un nuevo trazo, sin seguir el rastro del anterior
+		ctx.beginPath();
+		ctx.arc(90,110,30,a_radianes(0),a_radianes(180),false);
+		ctx.stroke();
+		//.restore restaura la informacion del contexto. Si hay varios .save, cuando se use el .restore, se va a restaurar el ultimo que se guardo, despues el penultimo, y asi sucesivamente.
+		ctx.restore();
+	};
+
+		//formula para obtener los radianes 
+		function a_radianes (grados) {
+			return (grados*Math.PI)/180;
+		};
+	};
+		</script>
+-------------------------------------------------
+<script>
+//como usar intervalos de tiempo
+window.addEventListener("load", init);
+function init(){
+	//el metodo setinterval, es un metodo del objeto window, que ejecuta el codigo que se le pasa, cada cierto tiempo.
+	//cada 1000 milisegundos, va a correr la funcion, y esta funcion va a mandar un console.log
+	var intervalo = window.setInterval(function(){console.log("Intervalo");}, 1000);
+	//el metodo .clearinterval, detiene el intervalo que se le pase como argumento, en el tiempo que se le pasa como argumento
+	setTimeout(function(){window.clearInterval(intervalo);}, 10000);
+	};
+		</script>
+-------------------------------------------------
+
+		<canvas id="micanvas">
+	Tu navegador no soporta canvas
+</canvas>
+<input type="button" value="Iniciar" id="boton">
+<script>
+//animacion basica de una pelota que rebota
+window.addEventListener("load", init);
+function init(){
+	var canvas= document.getElementById("micanvas");
+	var velocidad = 5, direccion = velocidad, iniciar= false, x =50, y = 10;
+	var intervalo;
+		//getcontext obtiene el contexto del canvax para poder usarlo, puede ser 3d o 2d
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle ="rgb(200,0,0)";
+		//este ctx.arc crea un circulo, no se le pasa la funcion de radianes porque un circulo completo tiene 6,algo de
+		//radianes, al ponerle 7 cierra el circulo completo, mas bien se pasa un poco
+		ctx.arc(x,y,10,0,7);
+		ctx.fill();
+		document.getElementById("boton").addEventListener("click", function(){
+			//esta funcion corre cada vez que se presiona el boton, cambia el texto(value) del boton y el valor de la
+			//variable iniciar (true o false). Un vez presionado, se ejecuta cada 32 milisegundos, hasta que se presione de
+			//nuevo
+			if (iniciar) {
+				this.value="Iniciar";
+				window.clearInterval(intervalo);
+				iniciar= false;
+			}else {
+				this.value="Detener";
+				intervalo=window.setInterval(function () {
+					moveAndDraw(canvas,ctx);
+				},32);
+				iniciar=true;
+			}
+		});
+		function draw (canvas,ctx,x,y) {
+			//con esta funcion se dibuja la pelota en cada nueva posicion de la coordenada y
+			//canvas.width es otra forma de limpiar el canvas, se vuelve a colocar el fillstyle, porque el canvas.width
+			//limpia eso tambien
+			canvas.width= canvas.width;
+			ctx.fillStyle ="rgb(200,0,0)";
+			ctx.arc(x,y,10,0,7);
+			ctx.fill();
+					}
+		function moveAndDraw (canvas,ctx) {
+			//con este if se controla que si la pelota ya llego arriba, empiece a bajar
+			if (y >(canvas.height -20)) {
+				direccion = -velocidad;
+				//se coloca que si y es menor que 20, porque 20 es el tope vertical de las coordenadas del canvas
+				//mientras que sea menor que 20, o sea el tope vertical, va a seguir subiendo
+			}if (y < 20) {
+				direccion = velocidad;
+			}
+			//se guarda en la coordenada y, el valor de direccion, que puede estar sumando o restando si la pelota sube 
+			//o baja, y se pasa el valor de y a la funcion draw, para que dibuje la pelota en la nueva posicion
+			y += direccion;
+			//x=y; si se descomenta esto, la pelota se mueve en diagonal
+			draw(canvas,ctx,x,y);
+		}
+	};
+		</script>
+
+-------------------------------------------------
+		<script>
+//crear y accerder a un objeto
+var tutor = {
+		nombre: "Zoilo",
+		edad: "26",
+		correo: "zgranda@gmail.com"
+	};
+window.addEventListener("load", init);
+function init(){
+	console.log("Nombre del tutor: " + tutor["nombre"]);
+	console.log("Edad del tutor: " + tutor["edad"]);
+	};
+		</script>
+-------------------------------------------------
+		<script>
+// En este codigo vemoscomo crear arreglos, recorrerlos de principio a fin, del final al principio, recorrerlos con el ciclo //for in, y el metodo .push para agregar un nuevo valor al final del arreglo
+var arreglo = [1,2,3];
+window.addEventListener("load", init);
+function init(){
+	//se agrega un nuevo valor al arreglo en la posicion 3
+	arreglo[3] = 4;
+	//con el metodo push se agrega un nuevo valor al arreglo en la ultima posicion
+	arreglo.push(5);
+	arreglo.push(6);
+	//recorrer un arreglo desde el ultimo elemento hasta el primero
+	for (var i = arreglo.length - 1; i >= 0; i--) {
+		console.log(arreglo[i]);
+	}
+	//recorrer un arreglo desde el primer elemento hasta el ultimo
+	for (var i = 0; i < arreglo.length; i++) {
+		console.log(arreglo[i]);
+	}
+	//otra forma de recorrer un arreglo desde el primer elemento hasta el ultimo
+	for (i in arreglo) {
+		console.log(arreglo[i]);
+	}
+	};
+		</script>
+</body>
+</body>
+</html>
+
+

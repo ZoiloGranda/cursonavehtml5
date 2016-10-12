@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		canvas {
+			border: solid;
+		}
+	</style>
+</head>
+<body>
+<canvas id="micanvas">
+	Tu navegador no soporta canvas
+</canvas>
+<input type="button" value="Iniciar" id="boton">
+<script>
+//crear figuras con arcos
+var arreglo = [1,2,3];
+window.addEventListener("load", init);
+function init(){
+	//se agrega un nuevo valor al arreglo en la posicion 3
+	arreglo[3] = 4;
+	//con el metodo push se agrega un nuevo valor al arreglo en la ultima posicion
+	arreglo.push(5);
+	arreglo.push(6);
+	//recorrer un arreglo desde el ultimo elemento hasta el primero
+	for (var i = arreglo.length - 1; i >= 0; i--) {
+		console.log(arreglo[i]);
+	}
+	//recorrer un arreglo desde el primer elemento hasta el ultimo
+	for (var i = 0; i < arreglo.length; i++) {
+		console.log(arreglo[i]);
+	}
+	//otra forma de recorrer un arreglo desde el primer elemento hasta el ultimo
+	for (i in arreglo) {
+		console.log(arreglo[i]);
+	}
+	};
+		</script>
+</body>
+</html>
